@@ -1,0 +1,174 @@
+{
+  "__guid": "6c1343f6-2100-48d0-98e9-7e8b82a65ecd",
+  "GameObjects": [
+    {
+      "__guid": "0f7e821b-4847-4166-8107-72a03412d5c7",
+      "Flags": 0,
+      "Name": "Scene Information",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Sandbox.SceneInformation",
+          "__guid": "e59c87d0-e6c7-4618-8ea1-0eab93df0d62",
+          "Changes": "",
+          "Description": "",
+          "SceneTags": "",
+          "Title": "Testing"
+        }
+      ]
+    },
+    {
+      "__guid": "8334198a-91b0-41a5-bddb-79ffcd995cd6",
+      "Flags": 0,
+      "Name": "Sun",
+      "Rotation": "-0.0729315,0.4822396,0.1305433,0.8631827",
+      "Tags": "light_directional,light",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Sandbox.DirectionalLight",
+          "__guid": "f77a06a9-e7f2-46cc-8b8c-5b03bffe3356",
+          "FogMode": "Enabled",
+          "FogStrength": 1,
+          "LightColor": "0.94419,0.97767,1,1",
+          "Shadows": true,
+          "SkyColor": "0.2532,0.32006,0.35349,1"
+        }
+      ]
+    },
+    {
+      "__guid": "7bef0fce-719c-4552-8c5c-5bbc1026ad12",
+      "Flags": 0,
+      "Name": "2D Skybox",
+      "Tags": "skybox",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Sandbox.SkyBox2D",
+          "__guid": "e798d71c-ee55-429a-8aae-871759026c15",
+          "SkyIndirectLighting": false,
+          "SkyMaterial": "materials/skybox/skybox_day_01.vmat",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.EnvmapProbe",
+          "__guid": "d1a9c5c4-aecb-4d3f-ba5b-08271b62b475",
+          "Bounds": {
+            "Mins": "-512,-512,-512",
+            "Maxs": "512,512,512"
+          },
+          "DelayBetweenUpdates": 0.1,
+          "Feathering": 0.02,
+          "FrameInterval": 5,
+          "MaxDistance": 512,
+          "MultiBounce": false,
+          "Projection": "Sphere",
+          "RenderDynamically": false,
+          "Texture": "textures/cubemaps/default2.vtex",
+          "TintColor": "1,1,1,1",
+          "UpdateStrategy": "OnEnabled",
+          "ZFar": 4096,
+          "ZNear": 16
+        }
+      ]
+    },
+    {
+      "__guid": "332f3973-2078-4256-98bc-b25fb3b60c37",
+      "Flags": 0,
+      "Name": "Plane",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "2f43958a-5e8d-4361-8460-6ecf46c68640",
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "Model": "models/dev/plane.vmdl",
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.BoxCollider",
+          "__guid": "dc0129f3-9e33-4b42-ab36-2d9dccfcd29d",
+          "Center": "0,0,0",
+          "IsTrigger": false,
+          "Scale": "100,100,0.1",
+          "Static": true,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ]
+    },
+    {
+      "__guid": "c9da5d28-d26d-4e9e-b193-9ec3547f38e5",
+      "Flags": 0,
+      "Name": "NetworkManager",
+      "Position": "-103.3846,201.3428,9.785252",
+      "Enabled": true,
+      "Components": [
+        {
+          "__type": "Sandbox.NetworkHelper",
+          "__guid": "f091b49a-cdfc-44d3-8362-643efa044dff",
+          "PlayerPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/player.prefab"
+          },
+          "SpawnPoints": [
+            {
+              "_type": "gameobject",
+              "go": "d627fb49-351e-46ff-b1c2-9e512d211b9a"
+            }
+          ],
+          "StartServer": true
+        }
+      ]
+    },
+    {
+      "__guid": "d627fb49-351e-46ff-b1c2-9e512d211b9a",
+      "Flags": 0,
+      "Name": "Object",
+      "Components": [
+        {
+          "__type": "Sandbox.SpawnPoint",
+          "__guid": "2d6e2ccf-dd31-44a3-ae9e-4d096a75ea97",
+          "Color": "0.8902,0.31765,0.05098,1"
+        }
+      ]
+    }
+  ],
+  "SceneProperties": {
+    "FixedUpdateFrequency": 50,
+    "MaxFixedUpdates": 5,
+    "NetworkFrequency": 30,
+    "NetworkInterpolation": true,
+    "PhysicsSubSteps": 1,
+    "ThreadedAnimation": true,
+    "TimeScale": 1,
+    "UseFixedUpdate": true,
+    "Metadata": {
+      "Title": "Testing"
+    },
+    "NavMesh": {
+      "Enabled": false,
+      "IncludeStaticBodies": true,
+      "IncludeKeyframedBodies": true,
+      "EditorAutoUpdate": true,
+      "AgentHeight": 64,
+      "AgentRadius": 16,
+      "AgentStepSize": 18,
+      "AgentMaxSlope": 40,
+      "ExcludedBodies": "",
+      "IncludedBodies": ""
+    }
+  },
+  "ResourceVersion": 2,
+  "Title": "Testing",
+  "Description": null,
+  "__references": [],
+  "__version": 2
+}
