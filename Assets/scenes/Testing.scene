@@ -73,38 +73,6 @@
       ]
     },
     {
-      "__guid": "332f3973-2078-4256-98bc-b25fb3b60c37",
-      "Flags": 0,
-      "Name": "Plane",
-      "Enabled": true,
-      "Components": [
-        {
-          "__type": "Sandbox.ModelRenderer",
-          "__guid": "2f43958a-5e8d-4361-8460-6ecf46c68640",
-          "BodyGroups": 18446744073709551615,
-          "CreateAttachments": false,
-          "Model": "models/dev/plane.vmdl",
-          "RenderOptions": {
-            "GameLayer": true,
-            "OverlayLayer": false,
-            "BloomLayer": false,
-            "AfterUILayer": false
-          },
-          "RenderType": "On",
-          "Tint": "1,1,1,1"
-        },
-        {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "dc0129f3-9e33-4b42-ab36-2d9dccfcd29d",
-          "Center": "0,0,0",
-          "IsTrigger": false,
-          "Scale": "100,100,0.1",
-          "Static": true,
-          "SurfaceVelocity": "0,0,0"
-        }
-      ]
-    },
-    {
       "__guid": "c9da5d28-d26d-4e9e-b193-9ec3547f38e5",
       "Flags": 0,
       "Name": "NetworkManager",
@@ -137,6 +105,310 @@
           "__type": "Sandbox.SpawnPoint",
           "__guid": "2d6e2ccf-dd31-44a3-ae9e-4d096a75ea97",
           "Color": "0.8902,0.31765,0.05098,1"
+        }
+      ]
+    },
+    {
+      "__guid": "a1704a5e-0fc5-46e5-8f36-1228a798aed7",
+      "Flags": 0,
+      "Name": "Floor",
+      "Enabled": true,
+      "Children": [
+        {
+          "__guid": "332f3973-2078-4256-98bc-b25fb3b60c37",
+          "Flags": 0,
+          "Name": "Plane",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "2f43958a-5e8d-4361-8460-6ecf46c68640",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "dc0129f3-9e33-4b42-ab36-2d9dccfcd29d",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "c66d39d0-64f1-49b6-ba73-9988284ac681",
+          "Flags": 0,
+          "Name": "Plane (3)",
+          "Position": "100,-100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "13ee62e8-1e1b-4825-aa9f-3e80dd9c9027",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "ef07167e-8833-4dd8-a4bd-123c8ceef311",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "822c4bc2-52e9-4acc-aef8-2360ff84410d",
+          "Flags": 0,
+          "Name": "Plane (4)",
+          "Position": "100,0,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "04ecc5be-2347-4b21-a020-e1314b4406c3",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "972dbf65-b720-4f47-88f2-3ef6d8ec517e",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "f101f9ea-62ba-4e50-a3c6-03dc97e94d16",
+          "Flags": 0,
+          "Name": "Plane (6)",
+          "Position": "-100,-100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "62fea6e6-ca83-46cc-ae02-51f17d649309",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "df633a46-7880-4e40-9884-521a55853140",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "14c5eef2-c65b-41dd-9d61-ee7262d0e530",
+          "Flags": 0,
+          "Name": "Plane (7)",
+          "Position": "-100,0,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "68e18269-c087-4579-b203-4bb24027c650",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "10b0591a-2474-4b12-ba14-a9eefa3c969d",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "49edd26c-a28a-412f-ad9a-739a3ca961f7",
+          "Flags": 0,
+          "Name": "Plane (8)",
+          "Position": "-100,100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "956cb409-df1e-4985-a609-c4c0e2a6f5f7",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "bcc725ac-a0f4-4ec7-a6a3-12d22055191c",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "076fb555-959a-4252-8bed-4279c0404504",
+          "Flags": 0,
+          "Name": "Plane (5)",
+          "Position": "100,100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "a0e2e9d0-610e-4f7d-998e-845acca10132",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "558fc5f3-247d-472c-a3a2-edc2ee1ad513",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "31db28d2-f219-402e-bb0d-53ce9efbadf2",
+          "Flags": 0,
+          "Name": "Plane (2)",
+          "Position": "0,-100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "40aa2ffe-8557-470a-9d93-4e8b24b62d34",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "6d8c2870-48f7-4caa-87c5-ee7863281e1f",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
+        },
+        {
+          "__guid": "dd6864da-c36f-4694-ac7e-71bd7321e9e9",
+          "Flags": 0,
+          "Name": "Plane (1)",
+          "Position": "0,100,0",
+          "Enabled": true,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "fa48a118-5986-4c4a-8633-d747915748cb",
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "Model": "models/dev/plane.vmdl",
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            },
+            {
+              "__type": "Sandbox.BoxCollider",
+              "__guid": "924461ce-ef41-4fd3-a8ca-617fd13889ab",
+              "Center": "0,0,0",
+              "IsTrigger": false,
+              "Scale": "100,100,0.1",
+              "Static": true,
+              "SurfaceVelocity": "0,0,0"
+            }
+          ]
         }
       ]
     }

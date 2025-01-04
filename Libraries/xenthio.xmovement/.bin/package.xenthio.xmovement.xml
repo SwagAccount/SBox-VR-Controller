@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>package.xenthio.xmovement</name>
+    </assembly>
+    <members>
+        <member name="P:XMovement.PlayerWalkControllerComplex.AimRay">
+            <summary>
+            Constructs a ray using the camera's GameObject
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.NoclipAction">
+            <summary>
+            The Input Action that noclipping is triggered by.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerWalkControllerComplex.CheckNoclip">
+            <summary>
+            TODO
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerWalkControllerComplex.DoNoclipMove">
+            <summary>
+            TODO
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.DefaultSpeed">
+            <summary>
+            How quickly does the player move by default?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.RunAction">
+            <summary>
+            The Input Action that the alternate speed mode is triggered by.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.RunByDefault">
+            <summary>
+            If the player should run by default, pressing the run action will swap to default speed
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.RunSpeed">
+            <summary>
+            The speed the player moves at while in the alternate speed mode.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.WalkAction">
+            <summary>
+            The Input Action that the alternate speed mode is triggered by.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.WalkSpeed">
+            <summary>
+            The speed the player moves at while in the alternate speed mode.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.CrouchAction">
+            <summary>
+            The Input Action that crouching is triggered by.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.CrouchSpeed">
+            <summary>
+            The speed the player moves at while crouching.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.JumpAction">
+            <summary>
+            The Input Action that jumping is triggered by.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.AllowPogosticking">
+            <summary>
+            Can the player hold down jump to repeatedly jump?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.JumpPower">
+            <summary>
+            How powerful is the player's jump?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.WantsJump">
+            <summary>
+            Do we want to jump next movement update?
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerWalkControllerComplex.BroadcastPlayerJumped">
+            <summary>
+            A network message that lets other users that we've triggered a jump.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerComplex.MovementPreset">
+            <summary>
+            Values from popular games.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerSimple.RunSpeed">
+            <summary>
+            How quickly does the player move by default?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerSimple.JumpPower">
+            <summary>
+            How powerful is the player's jump?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerWalkControllerSimple.WantsJump">
+            <summary>
+            Do we want to jump next movement update?
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerWalkControllerSimple.BroadcastPlayerJumped">
+            <summary>
+            A network message that lets other users that we've triggered a jump.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.Bounciness">
+            <summary>
+            When jumping into walls, should we bounce off or just stop dead?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.UseCollisionRules">
+            <summary>
+            If enabled, determine what to collide with using current project's collision rules for the <see cref="P:Sandbox.GameObject.Tags"/>
+            of the containing <see cref="T:Sandbox.GameObject"/>.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.LaunchUpwards(System.Single)">
+            <summary>
+            Move up and leave the ground, great for jumping.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.Accelerate(Vector3)">
+            <summary>
+            Add acceleration to the current velocity. 
+            No need to scale by time delta - it will be done inside.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.Accelerate(Vector3,System.Single)">
+            <summary>
+            Add our wish direction and speed onto our velocity
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.ApplyFriction(Vector3,System.Single,System.Single)">
+            <summary>
+            Apply an amount of friction to the current velocity.
+            No need to scale by time delta - it will be done inside.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.TraceDirection(Vector3)">
+            <summary>
+            Trace the controller's current position to the specified delta
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.Punch(Vector3@)">
+            <summary>
+            Disconnect from ground and punch our velocity. This is useful if you want the player to jump or something.
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.ClearGround">
+            <summary>
+            We're no longer on the ground, remove it
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.ChangeGround(Sandbox.GameObject,Sandbox.Collider,Vector3)">
+            <summary>
+            We have a new ground
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.MoveTo(Vector3,System.Boolean)">
+            <summary>
+            Move from our current position to this target position, but using tracing an sliding.
+            This is good for different control modes like ladders and stuff.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.Gravity">
+            <summary>
+            The current gravity.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.BaseFriction">
+            <summary>
+            How much friction does the player have?
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.StopSpeed">
+            <summary>
+            The speed at which we fully come to a stop.
+            </summary>
+        </member>
+        <member name="P:XMovement.PlayerMovement.AirControl">
+            <summary>
+            Can we control our movement in the air?
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.Move(System.Boolean,System.Boolean,System.Single)">
+            <summary>
+            Move a character, with this velocity
+            </summary>
+        </member>
+        <member name="M:XMovement.PlayerMovement.GetFriction">
+            <summary>
+            Get the current friction.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

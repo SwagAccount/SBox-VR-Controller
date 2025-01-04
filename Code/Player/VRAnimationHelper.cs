@@ -466,11 +466,11 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	Vector3 dampedPos;
 	private void MatchToHead()
 	{
-		dampedPos = Vector3.Lerp( dampedPos, Head.WorldPosition, Time.Delta * 10 );
-		var pos = dampedPos;
+		dampedPos = Vector3.Lerp( dampedPos, WorldTransform.PointToLocal(Head.WorldPosition) , Time.Delta * 10 );
+		var pos = WorldTransform.PointToWorld( dampedPos );
 
 		//Match Duck
-		float HeadHeight = Target.WorldTransform.PointToLocal( dampedPos ).z;
+		float HeadHeight = Target.WorldTransform.PointToLocal( Head.WorldPosition ).z;
 		Vector2 AHeadHeights = HeadHeights * Height;
 		float HeadFraction = (HeadHeight - AHeadHeights.y) / (AHeadHeights.x - AHeadHeights.y);
 
@@ -498,7 +498,8 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 
 		Target.LocalPosition = GameObject.WorldTransform.PointToLocal(pos) - childOffset;
 
-		Target.LocalPosition = Target.LocalPosition.WithZ( 0 );
+		if(Target.GetBool("b_grounded"))
+			Target.LocalPosition = Target.LocalPosition.WithZ( 0 );
 
 		TargetHead.WorldRotation = Head.WorldRotation * new Angles(-90,-90,0);
 	}
