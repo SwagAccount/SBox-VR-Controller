@@ -325,6 +325,9 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		if ( !Target.IsValid() )
 			return;
 
+		if ( !IsProxy && Input.VR == null )
+			return;
+
 		Target.Set( "scale_height", Height );
 
 		if ( IkLeftFoot.IsValid() && IkLeftFoot.Active ) Target.SetIk( "foot_left", IkLeftFoot.WorldTransform );
@@ -466,6 +469,9 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	Vector3 dampedPos;
 	private void MatchToHead()
 	{
+		if ( !Head.IsValid() )
+			return;
+
 		dampedPos = Vector3.Lerp( dampedPos, WorldTransform.PointToLocal(Head.WorldPosition) , Time.Delta * 10 );
 		var pos = WorldTransform.PointToWorld( dampedPos );
 
@@ -502,6 +508,7 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 			Target.LocalPosition = Target.LocalPosition.WithZ( 0 );
 
 		TargetHead.WorldRotation = Head.WorldRotation * new Angles(-90,-90,0);
+
 	}
 
 	public static float NormalizeAngle( float angle )
@@ -514,6 +521,9 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	Vector3 lastHeadPos;
 	private void MoveAnimations()
 	{
+		if ( !Head.IsValid() )
+			return;
+
 		Vector3 headPos = Head.WorldPosition;
 
 		Vector3 moveDirection = (headPos - lastHeadPos) / Time.Delta;

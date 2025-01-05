@@ -46,6 +46,9 @@ public partial class PlayerWalkControllerSimple : Component
 
 	protected override void OnUpdate()
 	{
+		if ( Input.VR == null )
+			return;
+
 		base.OnUpdate();
 		Controller.CenterOffset = Head.LocalPosition.WithZ( 0 );
 		Controller.Height = Head.LocalPosition.z;
@@ -58,6 +61,9 @@ public partial class PlayerWalkControllerSimple : Component
 
 	protected override void OnFixedUpdate()
 	{
+		if ( Input.VR == null )
+			return;
+
 		if ( !IsProxy )
 		{
 			if ( Controller.MovementFrequency == PlayerMovement.MovementFrequencyMode.PerFixedUpdate ) DoMovement();

@@ -183,7 +183,7 @@
           "__guid": "822c4bc2-52e9-4acc-aef8-2360ff84410d",
           "Flags": 0,
           "Name": "Plane (4)",
-          "Position": "100,0,0",
+          "Position": "100,0,19.97184",
           "Enabled": true,
           "Components": [
             {

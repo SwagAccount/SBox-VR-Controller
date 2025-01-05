@@ -13,6 +13,8 @@ public sealed class Vrrotate : Component
 
 	protected override void OnPreRender()
 	{
+		if ( Input.VR == null )
+			return;
 		if ( DoSnap )
 		{
 			bool Snap = false;

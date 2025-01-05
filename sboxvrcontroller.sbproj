@@ -1,10 +1,10 @@
 {
-  "Title": "SboxVrControl",
+  "Title": "VR Full Body Test",
   "Type": "game",
-  "Org": "local",
-  "Ident": "sboxvrcontrol",
+  "Org": "tft",
+  "Ident": "tftvrfullbody",
   "Schema": 1,
-  "IncludeSourceFiles": false,
+  "IncludeSourceFiles": true,
   "Resources": null,
   "PackageReferences": [],
   "EditorReferences": null,
@@ -22,6 +22,12 @@
     "PerMapRanking": false,
     "LeaderboardType": "None",
     "CsProjName": "",
-    "StartupScene": "scenes/minimal.scene"
+    "StartupScene": "scenes/testing.scene",
+    "ControlModes": {
+      "Keyboard": false,
+      "VR": true,
+      "Gamepad": false
+    },
+    "LaunchMode": "Normal"
   }
 }
