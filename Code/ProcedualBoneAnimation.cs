@@ -3,7 +3,7 @@ using Sandbox;
 public sealed class ProcedualBoneAnimation : Component
 {
 	SkinnedModelRenderer SkinnedModelRenderer;
-	List<(GameObject bone, bool notAnimated)> BoneObjects;
+	List<(GameObject boneObject, BoneCollection.Bone bone, bool notAnimated)> BoneObjects;
 	int boneCount;
 	protected override void OnStart()
 	{
@@ -15,21 +15,21 @@ public sealed class ProcedualBoneAnimation : Component
 			var boneObject = SkinnedModelRenderer.GetBoneObject( i );
 			if ( !boneObject.IsValid() )
 				continue;
-			BoneObjects.Add( (boneObject, boneObject.Flags.HasFlag(GameObjectFlags.ProceduralBone)) );
+			BoneObjects.Add( (boneObject, SkinnedModelRenderer.Model.Bones.GetBone( SkinnedModelRenderer.Model.GetBoneName( i ) ),  boneObject.Flags.HasFlag(GameObjectFlags.ProceduralBone)) );
 
 			boneObject.Flags = GameObjectFlags.ProceduralBone;
 		}
 	}
 
-	protected override void OnUpdate()
+	protected override void OnPreRender()
 	{
 		for (int i = 0; i < boneCount; i++ )
 		{
-			SkinnedModelRenderer.TryGetBoneTransformAnimation( SkinnedModelRenderer.Model.Bones.GetBone(SkinnedModelRenderer.Model.GetBoneName(i)), out var transform );
+			SkinnedModelRenderer.TryGetBoneTransformAnimation( BoneObjects[i].bone , out var transform );
 
 			if ( BoneObjects[i].notAnimated )
 				continue;
-			BoneObjects[i].bone.WorldTransform = transform;
+			BoneObjects[i].boneObject.WorldTransform = transform;
 		}
 	}
 
