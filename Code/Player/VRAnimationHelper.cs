@@ -20,20 +20,28 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	[Property] public GameObject TargetHead { get; set; }
 	[Property] public GameObject TargetHandLeft { get; set; }
 	[Property] public GameObject TargetHandRight { get; set; }
-	[Property] public VRHand LeftHand { get; set; }
-	[Property] public VRHand RightHand { get; set; }
-	[Property] public EasyIK LeftArmIK { get; set; }
-	[Property] public EasyIK RightArmIK { get; set; }
+	[Property, Feature( "Hands" )] public VRHand LeftHand { get; set; }
+	[Property, Feature( "Hands" )] public VRHand RightHand { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public EasyIK LeftArmIK { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public EasyIK RightArmIK { get; set; }
 	List<VRHand> hands => new List<VRHand> { LeftHand, RightHand };
 
 	GameObject _positionReference;
-	[Property,Hide]
 	private GameObject PositionReference
 	{ 
 		get
 		{
 			if ( !_positionReference.IsValid() )
 			{
+				foreach (var child in GameObject.Children)
+				{
+					if ( child.Name != "PosRef" )
+						continue;
+
+					_positionReference = child;
+
+					return PositionReference;
+				}
 				_positionReference = new GameObject();
 				_positionReference.Name = "PosRef";
 				_positionReference.SetParent( GameObject );
@@ -42,8 +50,10 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		}
 	}
 
-	public struct VRHand
+	public class VRHand
 	{
+		public bool NoControl { get; set; }
+		public GameObject Root { get; set; }
 		public VRFinger Thumb { get; set; }
 		public VRFinger Index { get; set; }
 		public VRFinger Middle { get; set; }
@@ -62,6 +72,8 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 			}
 			set
 			{
+				if ( Game.IsEditor )
+					return;
 				foreach ( var finger in Fingers )
 				{
 					finger.Bend = value;
@@ -220,32 +232,33 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		RightHand.CopyHand( LeftHand, CopyMod, CopyOpen, CopyClosed );
 	}
 
-	[Property] public Rotation CopyMod { get; set; }
+	[Property, Feature( "Hands" )] public Rotation CopyMod { get; set; }
 	[Property] public bool CopyOpen { get; set; } = true;
 	[Property] public bool CopyClosed { get; set; } = true;
 
-	[Property] public GameObject LeftHint { get; set; }
-	[Property] public GameObject LeftHintAnchor { get; set; }
-	[Property] public GameObject LeftHintInfluence { get; set; }
-	[Property] public GameObject RightHint { get; set; }
-	[Property] public GameObject RightHintAnchor { get; set; }
-	[Property] public GameObject RightHintInfluence { get; set; }
-	[Property] public float InfluenceVelocity { get; set; } = 120;
-	[Property] public float InfluenceSmoothness { get; set; } = 10;
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject LeftHint { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject LeftHintAnchor { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject RightHint { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject RightHintAnchor { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public float InfluenceVelocity { get; set; } = 120;
+	[Property, Feature( "IK" ), Category( "Arms" )] public float InfluenceSmoothness { get; set; } = 10;
 
-	[Property] public GameObject LeftTwist { get; set; }
-	[Property] public GameObject RightTwist { get; set; }
-	[Property] public float TwistWeight { get; set; } = 0.75f;
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject LeftTwist { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public GameObject RightTwist { get; set; }
+	[Property, Feature( "IK" ), Category( "Arms" )] public float TwistWeight { get; set; } = 0.75f;
 
-	[Property] public GameObject LeftShoulder { get; set; }
-	[Property] public GameObject LeftArmOrigin { get; set; }
-	[Property] public Rotation LeftShoulderOffset { get; set; } = new Angles( 1, 1, 90 );
-	[Property, InlineEditor] public Rotation LeftShoulderDefaultRotation { get; set; } = new();
-	[Property] public GameObject RightShoulder { get; set; }
-	[Property] public GameObject RightArmOrigin { get; set; }
-	[Property] public Rotation RightShoulderOffset { get; set; } = new Angles( 1, 1, 1 );
-	[Property] public float MaxHandShoulderInfluence = 0.8f;
-	[Property, InlineEditor] public Rotation RightShoulderDefaultRotation { get; set; } = new();
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public GameObject LeftShoulder { get; set; }
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public GameObject LeftArmOrigin { get; set; }
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public Rotation LeftShoulderOffset { get; set; } = new Angles( 1, 1, 90 );
+	[Property, Feature( "IK" ), Category( "Shoulders" ), InlineEditor] public Rotation LeftShoulderDefaultRotation { get; set; } = new();
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public GameObject RightShoulder { get; set; }
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public GameObject RightArmOrigin { get; set; }
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public float ShoulderLerpPower { get; set; } = 1;
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public float ShoulderMoveFraction { get; set; } = 0.5f;
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public Rotation RightShoulderOffset { get; set; } = new Angles( 1, 1, 1 );
+
+	[Property, Feature( "IK" ), Category( "Shoulders" )] public float MaxHandShoulderInfluence { get; set; } = 0.8f;
+	[Property, Feature( "IK" ), Category( "Shoulders" ), InlineEditor] public Rotation RightShoulderDefaultRotation { get; set; } = new();
 
 
 	[Button]
@@ -310,8 +323,8 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		updatingArms = false;
 	}
 
-	[Property, Group( "Inverse kinematics" ), Title( "Left Foot" )] public GameObject IkLeftFoot { get; set; }
-	[Property, Group( "Inverse kinematics" ), Title( "Right Foot" )] public GameObject IkRightFoot { get; set; }
+	[Property, Feature( "IK" ), Category( "Feet" )] public GameObject IkLeftFoot { get; set; }
+	[Property, Feature( "IK" ), Category( "Feet" )] public GameObject IkRightFoot { get; set; }
 
 	float leftHandVecocity => (LeftArmIK.ikTarget.WorldPosition - lastLeftHandPos).Length / Time.Delta;
 
@@ -323,9 +336,6 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	protected override void OnUpdate()
 	{
 		if ( !Target.IsValid() )
-			return;
-
-		if ( !IsProxy && Input.VR == null )
 			return;
 
 		Target.Set( "scale_height", Height );
@@ -361,6 +371,7 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		lastRightHandPos = RightArmIK.ikTarget.WorldPosition;
 	}
 
+
 	float leftHintLerp;
 	float rightHintLerp;
 	private void AdjustHints()
@@ -369,10 +380,10 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		{
 			var hint = i == 0 ? LeftHint : RightHint;
 			var hintAnchor = i == 0 ? LeftHintAnchor : RightHintAnchor;
-			var hintInfluence = i == 0 ? LeftHintInfluence : RightHintInfluence;
-			var velocity = i == 0 ? leftHandVecocity : rightHandVecocity;
+			var ik = i == 0 ? LeftArmIK : RightArmIK;
+			var velocity = i == 0 ? (LeftArmIK.ikTarget.WorldPosition - lastLeftHandPos) : (RightArmIK.ikTarget.WorldPosition - lastRightHandPos);
 			
-			var x = MathX.Clamp( Normalize( velocity, 0, InfluenceVelocity ), 0, 1);
+			var x = MathX.Clamp( Normalize( velocity.Length, 0, InfluenceVelocity ), 0, 1);
 
 			if( i == 0 )
 			{
@@ -383,7 +394,7 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 				rightHintLerp = MathX.Lerp( rightHintLerp, x, InfluenceSmoothness * Time.Delta);
 			}
 
-			hint.WorldPosition = Vector3.Lerp(hintAnchor.WorldPosition,hintInfluence.WorldPosition,i == 0 ? leftHintLerp : rightHintLerp);
+			hint.WorldPosition = Vector3.Lerp(hintAnchor.WorldPosition, ik.ikTarget.WorldPosition + velocity.Normal * ik.jointChainLength/2 ,i == 0 ? leftHintLerp : rightHintLerp);
 		}
 	}
 
@@ -406,7 +417,7 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 
 			var direction = ik.ikTarget.WorldPosition - shoulder.WorldPosition;
 
-			var lerp = MathF.Pow( MathX.Clamp( Normalize( Vector3.DistanceBetween( armOrigin.WorldPosition, ik.ikTarget.WorldPosition ), 0, ik.jointChainLength ), 0 , MaxHandShoulderInfluence), 3 );
+			var lerp = MathF.Pow( MathX.Clamp( Normalize( Vector3.DistanceBetween( armOrigin.WorldPosition, ik.ikTarget.WorldPosition ), 0, ik.jointChainLength ) - ShoulderMoveFraction, 0 , MaxHandShoulderInfluence), ShoulderLerpPower );
 
 			shoulder.WorldRotation = Rotation.Lerp( shoulder.Parent.WorldTransform.RotationToWorld( shoulderRotation ), Rotation.LookAt( direction ) * shoulderOffset, lerp );
 		}
@@ -433,6 +444,7 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	private void BroadcastFingers(bool left, float thumb, float index, float middle, float ring, float pinkie)
 	{
 		var hand = left ? LeftHand : RightHand;
+
 		hand.Thumb.Bend = Normalize( thumb, 0.932f, 2.5f );
 
 		hand.Index.Bend = Normalize( index, 0, 0.926f );
@@ -452,9 +464,10 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 
 	private void Fingers()
 	{
-		var hands = new List<VRHand> { LeftHand, RightHand };
 		foreach ( var hand in hands )
 		{
+			if ( hand.NoControl )
+				continue;
 			hand.BendFingers();
 		}
 	}
