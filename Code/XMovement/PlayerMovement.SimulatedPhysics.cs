@@ -38,7 +38,7 @@ public partial class PlayerMovement : Component
 		shadow.Tags.Add( "movement" );
 		shadow.NetworkMode = NetworkMode.Object;
 
-		var body = PhysicsBodyRigidbody.GameObject;
+		var body = Scene.CreateObject();
 		body.SetParent( GameObject );
 		body.Name = "PhysicsBody";
 		body.Tags.Add( "movement" );

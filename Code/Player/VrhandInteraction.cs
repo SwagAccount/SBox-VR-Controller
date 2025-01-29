@@ -3,6 +3,7 @@ using Sandbox.Citizen;
 using Sandbox.Physics;
 using Sandbox.VR;
 using System;
+using System.Drawing;
 
 public sealed class VrhandInteraction : Component
 {
@@ -14,11 +15,13 @@ public sealed class VrhandInteraction : Component
 	}
 
 	[Property] private VRAnimationHelper VRAnimationHelper { get; set; }
-	[Property] private GameObject Reference { get; set; }
+	[Property] public GameObject Reference { get; set; }
+	[Property] public GameObject IKTarget { get; set; }
 	[Property] private HandState CurrentHandState { get; set; }
 	[Property] private float SearchRadius { get; set; } = 5f;
 	[Property] private float SearchDistance { get; set; } = 200f;
 	[Property] private float StrengthModifier { get; set; } = 1f;
+	[Property] private EasyIK IK { get; set; }
 
 	public enum HandState
 	{
@@ -34,7 +37,9 @@ public sealed class VrhandInteraction : Component
 	private Rigidbody JointPoint { get; set; }
 	private Sandbox.Physics.FixedJoint FixedJoint { get; set; }
 	private Sandbox.Physics.FixedJoint ItemJoint { get; set; }
-
+	
+	Vector3 targetPos { get; set; }
+	Rotation targetRot { get; set; }
 	protected override void OnStart()
 	{
 		Body = GetComponent<Rigidbody>();
@@ -53,6 +58,9 @@ public sealed class VrhandInteraction : Component
 		FixedJoint.SpringAngular = new PhysicsSpring( 150, 5 );
 
 		CurrentHandState = HandState.Searching;
+
+		targetPos = IKTarget.LocalPosition;
+		targetRot = IKTarget.LocalRotation;
 	}
 
 	HandState previousHandState;
@@ -76,20 +84,20 @@ public sealed class VrhandInteraction : Component
 		}
 
 		previousHandState = CurrentHandState;
-
-		if ( ItemJoint.IsValid() )
-		{
-			ItemJoint.SpringLinear = new PhysicsSpring( 150 * StrengthModifier, 5 );
-			ItemJoint.SpringAngular = new PhysicsSpring( 150 * StrengthModifier, 5 );
-		}
 	}
-
+	RealTimeSince SearchDelay;
 	void Searching()
 	{
 		if ( previousHandState != HandState.Searching )
 		{
 			Tags.Remove( "activehand" );
+			SearchDelay = 0f;
 		}
+
+		if ( SearchDelay < 0.5f )
+			return;
+
+		dropped = false;
 
 		List<GrabPoint> GrabbablePoints = new List<GrabPoint>();
 		List<Interactable> InteractablePoints = new List<Interactable>();
@@ -99,9 +107,12 @@ public sealed class VrhandInteraction : Component
 		var closestDistance = 10000f;
 		var closestPoint = GrabbablePoints.Count > 0 ? GrabbablePoints[0] : null;
 
+		IKTarget.LocalPosition = targetPos;
+		IKTarget.LocalRotation = targetRot;
+
 		foreach ( var gPoint in GrabbablePoints )
 		{
-			var distance = Vector3.DistanceBetween( WorldPosition, gPoint.WorldPosition );
+			var distance = Vector3.DistanceBetween( WorldPosition, gPoint.VisualPoint );
 
 			if ( distance > closestDistance )
 				continue;
@@ -117,7 +128,8 @@ public sealed class VrhandInteraction : Component
 
 	void GrabPointSelection(GrabPoint closestPoint)
 	{
-		Gizmo.Draw.SolidSphere( closestPoint.WorldPosition, 0.5f );
+		Gizmo.Draw.IgnoreDepth = true;
+		Gizmo.Draw.SolidSphere( closestPoint.VisualPoint, 0.5f );
 
 		if ( VRController.Grip > 0.5f )
 			Grab( closestPoint );
@@ -127,7 +139,10 @@ public sealed class VrhandInteraction : Component
 	[Property] GrabPoint HeldPoint { get; set; }
 	void Holding()
 	{
-		if(VRController.Grip < 0.2f)
+		if ( dropped )
+			return;
+
+		if(VRController.Grip < 0.2f || (!HeldPoint.Main && !HeldPoint.MainPoint.Held) )
 		{
 			Drop();
 			return;
@@ -142,9 +157,23 @@ public sealed class VrhandInteraction : Component
 
 			CopyTransformRecursive( HeldPointSkeleton, AnimatedHand.Root, Vector3.One, new Angles(1,1,1) );
 
+			IKTarget.WorldPosition = AnimatedHand.Root.WorldPosition;
+			IKTarget.WorldRotation = AnimatedHand.Root.WorldRotation;
+
 			WorldPosition = HeldPoint.WorldPosition;
 			WorldRotation = HeldPoint.WorldRotation;
+			if(ItemJoint.IsValid())
+			{
+				ItemJoint.Point1 = new PhysicsPoint( ItemJoint.Point1.Body, HeldPoint.Body.WorldTransform.PointToLocal( HeldPoint.VisualPoint ), HeldPoint.Body.WorldTransform.RotationToLocal( HeldPoint.WorldRotation ) );
+				ItemJoint.Point2 = new PhysicsPoint( ItemJoint.Point2.Body, WorldTransform.PointToLocal( HeldPoint.VisualPoint ) );
+
+				ItemJoint.SpringLinear = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
+				ItemJoint.SpringAngular = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
+			}
+			
 		}
+
+
 	}
 
 	public void Grab( GrabPoint point )
@@ -152,6 +181,12 @@ public sealed class VrhandInteraction : Component
 		Tags.Add( "activehand" );
 		CurrentHandState = HandState.Holding;
 		HeldPoint = point;
+		HeldPoint.Held = true;
+		HeldPoint.Hand = Hand;
+		HeldPoint.GrabbedHand = this;
+
+		if ( !HeldPoint.Main )
+			return;
 
 		HeldPoint.Body.GameObject.SetParent( GameObject.Parent );
 
@@ -159,22 +194,27 @@ public sealed class VrhandInteraction : Component
 		var p2 = new PhysicsPoint( JointPoint.PhysicsBody, Vector3.Zero );
 
 		ItemJoint = PhysicsJoint.CreateFixed( p1, p2 );
-		ItemJoint.SpringLinear = new PhysicsSpring( 150, 5 );
-		ItemJoint.SpringAngular = new PhysicsSpring( 150, 5 );
+		ItemJoint.SpringLinear = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
+		ItemJoint.SpringAngular = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
 
-		HeldPoint.Held = true;
-		HeldPoint.Hand = Hand;
+		
 	}
 
+	bool dropped;
 	public void Drop()
 	{
 		CurrentHandState = HandState.Searching;
 		HeldPoint.Held = false;
-		HeldPoint?.Body.GameObject.SetParent( null );
+		HeldPoint.GrabbedHand = null;
+
+		if ( HeldPoint.Main && HeldPoint.DoUnparent() )
+			HeldPoint?.Body.GameObject.SetParent( null );
+
 		HeldPoint = null;
 		ItemJoint?.Remove();
 		ItemJoint = null;
-		
+
+		dropped = true;
 	}
 
 	void Search(ref List<GrabPoint> GrabbablePoints, ref List<Interactable> InteractablePoints)
@@ -184,7 +224,7 @@ public sealed class VrhandInteraction : Component
 			Vector3 searchPos = WorldPosition;
 			if ( i > 0 )
 			{
-				var ray = Scene.Trace.Ray( AnimatedHand.Root.WorldPosition, AnimatedHand.Root.WorldPosition + AnimatedHand.Root.WorldTransform.Forward * SearchDistance ).Radius( SearchRadius ).Run();
+				var ray = Scene.Trace.Ray( AnimatedHand.Root.WorldPosition, AnimatedHand.Root.WorldPosition + AnimatedHand.Root.WorldTransform.Forward * SearchDistance ).Radius( SearchRadius ).WithoutTags( "uninteractable" ).Run();
 				if ( ray.Hit ) searchPos = ray.HitPosition;
 			}
 			IEnumerable<GameObject> gameObjects = Scene.FindInPhysics( new Sphere( searchPos, SearchRadius ) );
@@ -193,23 +233,31 @@ public sealed class VrhandInteraction : Component
 
 			foreach ( GameObject g in gameObjects )
 			{
+				if ( g.Tags.Contains( "uninteractable" ) ) continue;
+
 				if ( i > 0 && g.Tags.Contains( "closepickup" ) ) continue;
 
 				if ( g.Tags.Contains( "interactable" ) )
 				{
 					var interactablePoint = g.GetComponent<Interactable>();
 					if ( !interactablePoint.IsValid )
-						break;
+						continue;
 					i = 10;
 					InteractablePoints.Add( interactablePoint );
 				}
 				if ( g.Tags.Contains( "grabpoint" ) )
 				{
+					
 					var grabPoint = g.GetComponent<GrabPoint>();
-					if ( !grabPoint.IsValid )
-						break;
+					if ( !grabPoint.IsValid() )
+						continue;
+
 					if ( grabPoint.Held )
-						break;
+						continue;
+
+					if ( !grabPoint.Main && !grabPoint.MainPoint.Held )
+						continue;
+
 					i = 10;
 					GrabbablePoints.Add( grabPoint ); ;
 				}
@@ -229,7 +277,7 @@ public sealed class VrhandInteraction : Component
 				Reference.WorldPosition;
 	}
 
-	public static void CopyTransformRecursive( GameObject target, GameObject set, Vector3 posMod, Angles angMod )
+	public static void CopyTransformRecursive( GameObject target, GameObject set, Vector3 posMod, Angles angMod, float lerp = 1 )
 	{
 
 		for ( int i = 0; i < target.Children.Count; i++ )
@@ -239,10 +287,28 @@ public sealed class VrhandInteraction : Component
 			GameObject targetChild = target.Children[i];
 			GameObject setChild = set.Children[i];
 
-			setChild.LocalPosition = targetChild.LocalPosition * posMod;
+			setChild.LocalPosition = Vector3.Lerp( setChild.LocalPosition, targetChild.LocalPosition * posMod, lerp);
 			Vector3 modifiedAngles = targetChild.LocalRotation.Angles().AsVector3() * angMod.AsVector3();
-			setChild.LocalRotation = new Angles( modifiedAngles.x, modifiedAngles.y, modifiedAngles.z );
-			CopyTransformRecursive( targetChild, setChild, posMod, angMod );
+			setChild.LocalRotation = Angles.Lerp( setChild.LocalRotation.Angles(), new Angles( modifiedAngles.x, modifiedAngles.y, modifiedAngles.z ), lerp);
+			CopyTransformRecursive( targetChild, setChild, posMod, angMod, lerp );
+		}
+	}
+
+	public static void CopyTransformRecursiveLerp( GameObject targetFrom, GameObject targetTo, GameObject set, Vector3 posMod, Angles angMod, float targetLerp, float lerp = 1 )
+	{
+
+		for ( int i = 0; i < targetFrom.Children.Count; i++ )
+		{
+			if ( i >= set.Children.Count )
+				continue;
+			GameObject targetFromChild = targetFrom.Children[i];
+			GameObject targetToChild = targetTo.Children[i];
+			GameObject setChild = set.Children[i];
+
+			setChild.LocalPosition = Vector3.Lerp( setChild.LocalPosition, Vector3.Lerp(targetFromChild.LocalPosition, targetToChild.LocalPosition, targetLerp) * posMod, lerp );
+			Vector3 modifiedAngles = Vector3.Lerp(targetFromChild.LocalRotation.Angles().AsVector3(), targetToChild.LocalRotation.Angles().AsVector3(), targetLerp) * angMod.AsVector3();
+			setChild.LocalRotation = Angles.Lerp( setChild.LocalRotation.Angles(), new Angles( modifiedAngles.x, modifiedAngles.y, modifiedAngles.z ), lerp );
+			CopyTransformRecursiveLerp( targetFromChild, targetToChild, setChild, posMod, angMod, lerp );
 		}
 	}
 

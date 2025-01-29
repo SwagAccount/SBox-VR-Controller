@@ -16,10 +16,12 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 	/// The skinned model renderer that we'll apply all parameters to.
 	/// </summary>
 	[Property] public SkinnedModelRenderer Target { get; set; }
+	[Property] public ProcedualBoneAnimation ProcedualBoneAnimation { get; set; }
 	[Property] public CameraComponent Camera { get; set; }
 	[Property] public GameObject TargetHead { get; set; }
 	[Property] public GameObject TargetHandLeft { get; set; }
 	[Property] public GameObject TargetHandRight { get; set; }
+	[Property] public Curve MinWalkSpeed { get; set; }
 	[Property, Feature( "Hands" )] public VRHand LeftHand { get; set; }
 	[Property, Feature( "Hands" )] public VRHand RightHand { get; set; }
 	[Property, Feature( "IK" ), Category( "Arms" )] public EasyIK LeftArmIK { get; set; }
@@ -210,9 +212,12 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 		}
 	}
 
-	protected override void OnAwake()
+	protected override  void OnAwake()
 	{
 		Camera.Enabled = !IsProxy;
+
+		
+
 	}
 
 	public static Angles ScaleAngles(Angles target, Angles by)
@@ -307,8 +312,6 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 			await Task.Frame();
 			await Task.Frame();
 
-			ik.jointTransforms.Last().LocalPosition = hand.LocalPosition;
-
 			ik.Awake();
 
 			hand.Flags = GameObjectFlags.Bone | GameObjectFlags.ProceduralBone;
@@ -335,6 +338,9 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 
 	protected override void OnUpdate()
 	{
+
+		ProcedualBoneAnimation.Update();
+
 		if ( !Target.IsValid() )
 			return;
 
@@ -541,7 +547,12 @@ public sealed class VRAnimationHelper : Component, Component.ExecuteInEditor
 
 		Vector3 moveDirection = (headPos - lastHeadPos) / Time.Delta;
 
-		WithVelocity( moveDirection );
+		float speed = moveDirection.Length;
+
+		if ( speed < MinWalkSpeed.Evaluate( DuckLevel ) )
+			speed = 0;
+
+		WithVelocity( moveDirection.Normal * speed );
 
 		lastHeadPos = headPos;
 	}

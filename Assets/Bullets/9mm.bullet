@@ -1,0 +1,11 @@
+{
+  "PrefabRef": null,
+  "Count": 1,
+  "Spread": "0,0",
+  "Grain": 115,
+  "Diameter": 0.354331,
+  "BaseVelocity": 1200,
+  "Damage": 0,
+  "__references": [],
+  "__version": 0
+}

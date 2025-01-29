@@ -21,7 +21,7 @@ public sealed class ProcedualBoneAnimation : Component
 		}
 	}
 
-	protected override void OnPreRender()
+	public void Update()
 	{
 		for (int i = 0; i < boneCount; i++ )
 		{
