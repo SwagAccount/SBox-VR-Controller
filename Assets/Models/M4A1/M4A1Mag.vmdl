@@ -1,0 +1,338 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = [  ]
+						use_global_default = false
+						global_default_material = "materials/default.vmat"
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						name = "Empty"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Mag",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "1"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "2"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+								"B2",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "3"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+								"B2",
+								"B3",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "4"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+								"B2",
+								"B3",
+								"B4",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "5"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+								"B2",
+								"B3",
+								"B4",
+								"B6",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "6"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"Mag",
+								"B2",
+								"B3",
+								"B4",
+								"B6",
+								"B7",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "7"
+						filename = "models/m4a1/m4a1.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"B1",
+								"B2",
+								"B3",
+								"B4",
+								"B6",
+								"B7",
+								"B8",
+								"Mag",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "BodyGroupList"
+				children = 
+				[
+					{
+						_class = "BodyGroup"
+						name = "Bullets"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								name = "Empty"
+								meshes = 
+								[
+									"Empty",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "1"
+								meshes = 
+								[
+									"1",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "2"
+								meshes = 
+								[
+									"2",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "3"
+								meshes = 
+								[
+									"3",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "4"
+								meshes = 
+								[
+									"4",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "5"
+								meshes = 
+								[
+									"5",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "6"
+								meshes = 
+								[
+									"6",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "7"
+								meshes = 
+								[
+									"7",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFile"
+						name = "M4A1"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						recenter_on_parent_bone = false
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						filename = "Models/M4A1/M4A1.fbx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = 
+							[
+								"Piston",
+								"B8",
+								"B7",
+								"B6",
+								"B4",
+								"B3",
+								"B2",
+								"B1",
+							]
+						}
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

@@ -3,13 +3,16 @@
 public sealed class PistolTrigger : Component
 {
 	[Property] public GrabPoint GrabPoint { get; set; }
-	[Property] public Slide Slide { get; set; }
+	[Property] public PistolSlide Slide { get; set; }
 	[Property] public Barrel Barrel { get; set; }
 	[Property] public GameObject LeftIndex { get; set; }
 	[Property] public GameObject RightIndex { get; set; }
 	[Property] public GameObject OffTrigger { get; set; }
 	[Property] public GameObject OnTrigger { get; set; }
 	[Property] public GameObject TriggerDown { get; set; }
+	[Property] public bool RapidFire { get; set; }
+	[Property] public Angles StartRot { get; set; }
+	[Property] public Angles DownRot { get; set; }
 
 	float lastPullBack;
 	protected override void OnUpdate()
@@ -24,7 +27,9 @@ public sealed class PistolTrigger : Component
 		else
 			OnTriggerPose(controller.Trigger);
 
-		if ( controller.Trigger >= 0.9f && lastPullBack <= 0.9f && Slide.PullBack == 0)
+		LocalRotation = Angles.Lerp( StartRot, DownRot, controller.Trigger );
+
+		if ( controller.Trigger >= 0.9f && (lastPullBack < 0.9f || RapidFire) && Slide.visualPullBack == 0)
 			Barrel.TryFire();
 
 		lastPullBack = controller.Trigger;

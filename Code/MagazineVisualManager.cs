@@ -1,4 +1,5 @@
 using Sandbox;
+using System;
 
 public sealed class MagazineVisualManager : Component, Component.ExecuteInEditor
 {
@@ -17,11 +18,13 @@ public sealed class MagazineVisualManager : Component, Component.ExecuteInEditor
 		}
 	}
 
-	[Property] public int AmmoMax { get; set; } = 15;
-	[Property] public string BodyGroup { get; set; }
+	[Property] public int AmmoMax { get; set; }
+	[Property] public int AmmoVisualMax { get; set; }
+	[Property] public string BodyGroup { get; set; } = "Bullets";
 	[Property] private ModelRenderer ModelRenderer { get; set; }
 	[Property] private GameObject Piston { get; set; }
 	[Property] private Vector3 PistonEndPosition { get; set; }
+	[Property] private int PistonEndBullet { get; set; }
 	protected override void OnStart()
 	{
 		UpdateVisuals();
@@ -32,11 +35,14 @@ public sealed class MagazineVisualManager : Component, Component.ExecuteInEditor
 		if ( !ModelRenderer.IsValid() )
 			return;
 		
-		ModelRenderer.SetBodyGroup( BodyGroup, AmmoCount );
+		ModelRenderer.SetBodyGroup( BodyGroup,  Math.Clamp(AmmoCount,0,AmmoVisualMax) );
 
 		if ( !Piston.IsValid() )
 			return;
 
-		Piston.LocalPosition = PistonEndPosition * (AmmoCount / (float)AmmoMax);
+		if(AmmoCount <= PistonEndBullet)
+			Piston.LocalPosition = PistonEndPosition * ( AmmoCount / (float)PistonEndBullet);
+
+		Piston.Enabled = AmmoCount <= PistonEndBullet;
 	}
 }

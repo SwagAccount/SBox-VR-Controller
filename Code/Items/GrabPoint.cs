@@ -3,7 +3,9 @@ using Sandbox;
 public sealed class GrabPoint : Component
 {
 	[Property] public bool Main { get; set; } = true;
-	[Property, HideIf("Main",true)] public GrabPoint MainPoint { get; set; }
+	[Property] public GrabPoint SecondaryPoint { get; set; }
+	[Property] public GrabPoint MainPoint { get; set; }
+	[Property] public bool RifleHold { get; set; }
 	[Property] public bool Held { get; set; }
 	[Property] public VrhandInteraction.HandEnum Hand { get; set; }
 	[Property] public Rigidbody Body { get; set; }

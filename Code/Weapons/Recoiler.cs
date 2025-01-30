@@ -7,8 +7,11 @@ public sealed class Recoiler : Component
 	[ Property] private float RecoilForce { get; set; } = 5000f;
 	[Property] private float WeakenTo { get; set; } = 0.5f;
 	[Property] private float WeakenRecover { get; set; } = 20f;
+
+	RealTimeSince SleepClock { get; set; }
 	public void Recoil()
 	{
+		SleepClock = 0;
 		int heldCount = 0;
 		foreach (var grabPoint in item.GrabPoints)
 		{
@@ -21,6 +24,8 @@ public sealed class Recoiler : Component
 	}
 	protected override void OnFixedUpdate()
 	{
+		if ( SleepClock > 2 )
+			return;
 		foreach ( var grabPoint in item.GrabPoints )
 		{
 			grabPoint.StrengthMult = MathX.Lerp( grabPoint.StrengthMult, 1, WeakenRecover * Time.Delta );

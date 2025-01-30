@@ -22,7 +22,7 @@ public sealed class BulletProjectile : Component
 		//poss.Add(WorldPosition);
 		if(hitSomething) return;
 		
-        var ray = Scene.Trace.Ray(lastPos,WorldPosition).Radius(bullet.Diameter/2).UseHitboxes().IgnoreGameObjectHierarchy(Firerer).Run();
+        var ray = Scene.Trace.Ray(lastPos,WorldPosition).Radius(bullet.Diameter/2).UseHitboxes().IgnoreGameObjectHierarchy(owner).Run();
 
 		if(ray.Hit)
 		{
@@ -47,7 +47,8 @@ public sealed class BulletProjectile : Component
 				healthComponent.DoDamage(damage, owner);
 			}
 			rB.MotionEnabled = false;
-			if(ray.Surface.Sounds.ImpactHard != null) Sound.Play(ray.Surface.Sounds.ImpactHard,ray.HitPosition);
+
+			ray.Surface?.DoBulletImpact( ray );
 			/*
 			GameObject debugBox = new GameObject();
 			debugBox.Components.Create<ModelRenderer>();
@@ -88,5 +89,107 @@ public static partial class ParticleExtentions
 
 		return p;
 	}
+	public static LegacyParticleSystem DoBulletImpact( this Surface self, SceneTraceResult tr )
+	{
+		//
+		// Drop a decal
+		//
+		var decalPath = Game.Random.FromList( self.ImpactEffects.BulletDecal );
+
+		var surf = self.GetBaseSurface();
+		while ( string.IsNullOrWhiteSpace( decalPath ) && surf != null )
+		{
+			decalPath = Game.Random.FromList( surf.ImpactEffects.BulletDecal );
+			surf = surf.GetBaseSurface();
+		}
+
+		if ( !string.IsNullOrWhiteSpace( decalPath ) )
+		{
+			if ( ResourceLibrary.TryGet<DecalDefinition>( decalPath, out var decal ) )
+			{
+				var go = new GameObject
+				{
+					Name = decalPath,
+					Parent = tr.GameObject,
+					WorldPosition = tr.EndPosition,
+					WorldRotation = Rotation.LookAt( -tr.Normal )
+				};
+
+				if ( tr.Bone > -1 )
+				{
+					var renderer = tr.GameObject.GetComponentInChildren<SkinnedModelRenderer>();
+					var bone = renderer.GetBoneObject( tr.Bone );
+
+					go.SetParent( bone );
+				}
+
+				var randomDecal = Game.Random.FromList( decal.Decals );
+
+				var decalRenderer = go.AddComponent<DecalRenderer>();
+				decalRenderer.Material = randomDecal.Material;
+				decalRenderer.Size = new Vector3( randomDecal.Width.GetValue(), randomDecal.Height.GetValue(), randomDecal.Depth.GetValue() );
+
+				go.NetworkSpawn( null );
+				go.Network.SetOrphanedMode( NetworkOrphaned.Host );
+				go.DestroyAsync( 10f );
+			}
+		}
+
+		//
+		// Make an impact sound
+		//
+		var sound = self.Sounds.Bullet;
+
+		surf = self.GetBaseSurface();
+		while ( string.IsNullOrWhiteSpace( sound ) && surf != null )
+		{
+			sound = surf.Sounds.Bullet;
+			surf = surf.GetBaseSurface();
+		}
+
+		//
+		// Get us a particle effect
+		//
+
+		string particleName = Game.Random.FromList( self.ImpactEffects.Bullet );
+		if ( string.IsNullOrWhiteSpace( particleName ) ) particleName = Game.Random.FromList( self.ImpactEffects.Regular );
+
+		surf = self.GetBaseSurface();
+		while ( string.IsNullOrWhiteSpace( particleName ) && surf != null )
+		{
+			particleName = Game.Random.FromList( surf.ImpactEffects.Bullet );
+			if ( string.IsNullOrWhiteSpace( particleName ) ) particleName = Game.Random.FromList( surf.ImpactEffects.Regular );
+
+			surf = surf.GetBaseSurface();
+		}
+
+		if ( !string.IsNullOrWhiteSpace( particleName ) )
+		{
+			var go = new GameObject
+			{
+				Name = particleName,
+				Parent = tr.GameObject,
+				WorldPosition = tr.EndPosition,
+				WorldRotation = Rotation.LookAt( tr.Normal )
+			};
+
+			var legacyParticleSystem = go.AddComponent<LegacyParticleSystem>();
+			legacyParticleSystem.Particles = ParticleSystem.Load( particleName );
+			legacyParticleSystem.ControlPoints = new()
+			{
+				new ParticleControlPoint { GameObjectValue = go, Value = ParticleControlPoint.ControlPointValueInput.GameObject }
+			};
+
+			go.NetworkSpawn( null );
+			go.Network.SetOrphanedMode( NetworkOrphaned.Host );
+			go.DestroyAsync( 5f );
+
+			return legacyParticleSystem;
+		}
+
+		return default;
+	}
 }
+
+
 

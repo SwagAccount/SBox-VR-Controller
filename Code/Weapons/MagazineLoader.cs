@@ -7,6 +7,7 @@ public sealed class MagazineLoader : Component, Component.ITriggerListener
 	[Property] public GameObject MagParent { get; set; }
 	[Property] public GameObject MagDrop { get; set; }
 	[Property] public List<string> AcceptedMags { get; set; }
+	[Property] public bool PickupMag { get; set; }
 	[Property] public float MagTime { get; set; } = 0.1f;
 
 	public void OnTriggerEnter( Collider other )
@@ -46,7 +47,8 @@ public sealed class MagazineLoader : Component, Component.ITriggerListener
 
 		other.LocalRotation = Rotation.Identity;
 
-		other.Tags.Add( "uninteractable" );
+		if(!PickupMag)
+			other.Tags.Add( "uninteractable" );
 
 		SlideT = 0;
 		
@@ -54,9 +56,19 @@ public sealed class MagazineLoader : Component, Component.ITriggerListener
 
 	bool Dropping;
 	RealTimeSince SlideT;
+	RealTimeSince SleepClock;
 
 	protected override void OnFixedUpdate()
 	{
+		if ( GrabPoint.Held )
+			SleepClock = 0;
+
+		if ( SleepClock > 1 )
+			return;
+
+		if ( !Magazine.IsValid() )
+			return;
+
 		if (Dropping)
 		{
 
@@ -66,15 +78,13 @@ public sealed class MagazineLoader : Component, Component.ITriggerListener
 			{
 				Magazine.Item.Body.MotionEnabled = true;
 				Magazine.GameObject.SetParent( null );
-				Magazine.GameObject.Tags.Remove( "uninteractable" );
+				if ( !PickupMag )
+					Magazine.GameObject.Tags.Remove( "uninteractable" );
 				Magazine = null;
 				Dropping = false;
 			}
 			return;
 		}
-
-		if ( !Magazine.IsValid() )
-			return;
 
 		if ( Magazine.GameObject.Parent != MagParent )
 		{
@@ -89,6 +99,7 @@ public sealed class MagazineLoader : Component, Component.ITriggerListener
 		if ( GrabPoint.Hand.Equals(VrhandInteraction.HandEnum.Left) ? Input.VR.LeftHand.ButtonB.IsPressed : Input.VR.RightHand.ButtonB.IsPressed )
 		{
 			Dropping = true;
+			SlideT = 0;
 		}
 	}
 }

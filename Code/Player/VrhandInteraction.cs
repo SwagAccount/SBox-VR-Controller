@@ -17,6 +17,7 @@ public sealed class VrhandInteraction : Component
 	[Property] private VRAnimationHelper VRAnimationHelper { get; set; }
 	[Property] public GameObject Reference { get; set; }
 	[Property] public GameObject IKTarget { get; set; }
+	[Property] public GameObject UpRef { get; set; }
 	[Property] private HandState CurrentHandState { get; set; }
 	[Property] private float SearchRadius { get; set; } = 5f;
 	[Property] private float SearchDistance { get; set; } = 200f;
@@ -34,7 +35,7 @@ public sealed class VrhandInteraction : Component
 	private VRAnimationHelper.VRHand AnimatedHand => Hand.Equals( HandEnum.Left ) ? VRAnimationHelper.LeftHand : VRAnimationHelper.RightHand;
 
 	private Rigidbody Body { get; set; }
-	private Rigidbody JointPoint { get; set; }
+	public Rigidbody JointPoint { get; set; }
 	private Sandbox.Physics.FixedJoint FixedJoint { get; set; }
 	private Sandbox.Physics.FixedJoint ItemJoint { get; set; }
 	
@@ -85,6 +86,33 @@ public sealed class VrhandInteraction : Component
 
 		previousHandState = CurrentHandState;
 	}
+
+	protected override void OnPreRender()
+	{
+		if ( CurrentHandState == HandState.Holding && ItemJoint.IsValid() )
+		{
+			ItemJoint.Point1 = new PhysicsPoint( ItemJoint.Point1.Body, HeldPoint.Body.WorldTransform.PointToLocal( HeldPoint.VisualPoint ), HeldPoint.Body.WorldTransform.RotationToLocal( HeldPoint.WorldRotation ) );
+
+			if(HeldPoint.RifleHold && HeldPoint.SecondaryPoint.Held)
+			{
+				var localForward = UpRef.WorldTransform.Forward;
+
+				var targetForward = HeldPoint.SecondaryPoint.GrabbedHand.UpRef.WorldPosition - UpRef.WorldPosition;
+
+				ItemJoint.Point2 = new PhysicsPoint( ItemJoint.Point2.Body, WorldTransform.PointToLocal( HeldPoint.VisualPoint ), WorldTransform.RotationToLocal( Rotation.FromToRotation(localForward,targetForward) ) );
+			}
+			else
+			{
+				ItemJoint.Point2 = new PhysicsPoint( ItemJoint.Point2.Body, WorldTransform.PointToLocal( HeldPoint.VisualPoint ) );
+			}
+			
+
+			ItemJoint.SpringLinear = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
+
+			ItemJoint.SpringAngular = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
+		}
+	}
+
 	RealTimeSince SearchDelay;
 	void Searching()
 	{
@@ -162,14 +190,6 @@ public sealed class VrhandInteraction : Component
 
 			WorldPosition = HeldPoint.WorldPosition;
 			WorldRotation = HeldPoint.WorldRotation;
-			if(ItemJoint.IsValid())
-			{
-				ItemJoint.Point1 = new PhysicsPoint( ItemJoint.Point1.Body, HeldPoint.Body.WorldTransform.PointToLocal( HeldPoint.VisualPoint ), HeldPoint.Body.WorldTransform.RotationToLocal( HeldPoint.WorldRotation ) );
-				ItemJoint.Point2 = new PhysicsPoint( ItemJoint.Point2.Body, WorldTransform.PointToLocal( HeldPoint.VisualPoint ) );
-
-				ItemJoint.SpringLinear = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
-				ItemJoint.SpringAngular = new PhysicsSpring( 100 * HeldPoint.StrengthMult, 5 );
-			}
 			
 		}
 
